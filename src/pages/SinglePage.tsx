@@ -1,23 +1,52 @@
+import React,  { useEffect, useState } from 'react'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'animate.css';
-import React,  { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useDocument } from 'react-firebase-hooks/firestore';
+import { doc, getFirestore } from 'firebase/firestore';
+import { useParams } from 'react-router-dom';
 import ProductThumbnail from '../components/ProductThumbnail';
+import { app } from '../Firebase';
 
 const SinglePage = () => {
 
     const [exitState, setexitState] = useState(false)
+    const [ product, setproduct ] = useState(null)
+    const [colors, setcolors] = useState([''])
+    const [sizes, setsizes] = useState([''])
 
-    let { pid } = useParams();
+    let { pid } : any = useParams();
 
     let data = {
         id : pid,
         name : "Coudory Long Sleeve",
         price : "9000",
     }
-    console.log(pid)
+    // console.log(pid)
+
+    const db:any = getFirestore(app)
+    const productRef = doc(db, `products/${pid}`)
+    const [snapshot, loading, error] : any = useDocument(productRef);
+
+
+    
+    useEffect(() => {
+        // let price:number = 5000;
+        // let stringedPrice:string = price.toString()
+        // console.log(stringedPrice.split(','))
+        if(snapshot){
+            setproduct(snapshot.data());
+            setcolors(snapshot.data().color)
+            setsizes(snapshot.data().size)
+        }
+    }, [snapshot])
+    
+
+
   return (
+      <>
+      {error ? <div>Error</div> : 
+    loading ? <div>Loading...</div> :
     <div className={!exitState ? 'container animate__animated animate__fadeInUp animate__faster mt-5 p-3' 
     : 'container animate__animated animate__fadeOutDown animate__faster mt-5 p-3'}>
         <div className="row mb-5">
@@ -28,7 +57,7 @@ const SinglePage = () => {
                         <FontAwesomeIcon className='mr-2' icon={faArrowLeft} />
                         Product Page
                     </button>
-                    <div> / {pid}</div>
+                    <div> / {snapshot.data().name}</div>
                 </nav>
 
             </div>
@@ -50,15 +79,15 @@ const SinglePage = () => {
                 <div className="row">
                     <div className="col-12">
                         <div className="mb-5">
-                            <h2 className="big-title">{data.name}</h2>
-                            <h4 className="text-mid">N{data.price}</h4>
+                            <h2 className="big-title">{snapshot.data().name}</h2>
+                            <h4 className="text-mid">N{snapshot.data().price}</h4>
                         </div>
                         <div className="mb-5">
                             <h4 className="text-mid-sub">
                                 Description
                             </h4>
                             <p className="text-p">
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Porro iusto et molestiae unde at doloribus, quod asperiores amet modi provident.
+                                {snapshot.data().description}
                             </p>
                         </div>
                         <div className="mb-5">
@@ -67,9 +96,12 @@ const SinglePage = () => {
                             </h4>
                             <p className="text-p">
                                 <div className="d-flex">
-                                    <div className="color-box mr-2 active" style={{backgroundColor : '#eee'}}></div>
-                                    <div className="color-box mr-2" style={{backgroundColor : 'orange'}}></div>
-                                    <div className="color-box mr-2" style={{backgroundColor : 'teal'}}></div>
+                                    {colors && colors.map((color:string) => {
+                                            return(
+                                                <div className="color-box mr-2" key={colors.indexOf(color)} style={{backgroundColor : color}}></div>
+                                            )
+                                        })
+                                    }
                                 </div>
                             </p>
                         </div>
@@ -91,7 +123,8 @@ const SinglePage = () => {
                 </div>
             </div>
         </div>
-    </div>
+    </div>}
+    </>
   )
 }
 

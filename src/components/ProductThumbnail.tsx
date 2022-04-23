@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const ProductThumbnail = ({ large = false, pid, prod, products }:any ) => {
+const ProductThumbnail = ({ large = false, pid, product }:any ) => {
 
     const useLargeThumbnail = () => {
         if(large) {
@@ -14,46 +14,25 @@ const ProductThumbnail = ({ large = false, pid, prod, products }:any ) => {
     }
 
     const useSmallThumbnail = () =>{
-        if(!large){
+        if(!large && product){
+            console.log(pid);
+            
                 return(
-                <div className="row">
-                
-                <div className="col">
-                    <Link to='/product/1234'>
-                    <div className="card" style={{height : 278, width : 278}}>
-                        <img src="https://www.gstatic.com/webp/gallery3/1.png" className="card-img-top" alt="..." />
-                        <div className="card-body">
-                            <h5 className="card-title">N9000</h5>
-                            <p className="card-text">
-                                Coudory Long Sleeve
-                            </p>
+                // <div className="row">
+                    <div className="col">
+                        <Link to={`/product/${pid}`}>
+                        <div className="card" style={{height : 278, width : 278}}>
+                            <img src="https://www.gstatic.com/webp/gallery3/1.png" className="card-img-top" alt="..." />
+                            <div className="card-body">
+                                <h5 className="card-title">{product.name}</h5>
+                                <p className="card-text">
+                                    {product.price}
+                                </p>
+                            </div>
                         </div>
+                        </Link>
                     </div>
-                    </Link>
-                </div>
-                <div className="col">
-                    <div className="card" style={{height : 278, width : 278}}>
-                        <img src="https://www.gstatic.com/webp/gallery3/1.png" className="card-img-top" alt="..." />
-                        <div className="card-body">
-                            <h5 className="card-title">N9000</h5>
-                            <p className="card-text">
-                                Coudory Long Sleeve
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div className="col">
-                    <div className="card" style={{height : 278, width : 278}}>
-                        <img src="https://www.gstatic.com/webp/gallery3/1.png" className="card-img-top" alt="..." />
-                        <div className="card-body">
-                            <h5 className="card-title">N9000</h5>
-                            <p className="card-text">
-                                Coudory Long Sleeve
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            // </div>
             )
         }
     }

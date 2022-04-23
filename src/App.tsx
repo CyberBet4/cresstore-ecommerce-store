@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './assets/css/style.css';
 import Header from './layouts/Header';
-import Home from './pages/Home';
 import Footer from './layouts/Footer';
 import ProductPage from './pages/ProductPage';  
 import SinglePage from './pages/SinglePage';

@@ -3,10 +3,6 @@ import Navbar from 'react-bootstrap/Navbar'
 import Container from 'react-bootstrap/Container'
 import Offcanvas from 'react-bootstrap/Offcanvas'
 import Nav from 'react-bootstrap/Nav'
-import Form from 'react-bootstrap/Form'
-import NavDropdown from 'react-bootstrap/NavDropdown'
-import Button from 'react-bootstrap/Button'
-import FormControl from 'react-bootstrap/FormControl'
 import CartItem from '../components/CartItem'
 
 const Header = () => {
@@ -30,6 +26,7 @@ const Header = () => {
         <p className="text-p">3 Items</p>
         <CartItem />
         <CartItem />
+        <button className="btn btn-primary btn-lg w-100">Checkout Now</button>
         </Nav>
         
       </Offcanvas.Body>

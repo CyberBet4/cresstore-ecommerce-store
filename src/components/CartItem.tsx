@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMinus, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 const CartItem = () => {
-    const [cartCounter, setCartCounter] : any = useState(1)
+
+    const [cartCounter, setCartCounter] = useState(1)
+
   return (
     <>
         <div className="d-flex cart-item mb-3">

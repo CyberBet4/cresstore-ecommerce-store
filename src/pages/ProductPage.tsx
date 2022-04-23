@@ -1,11 +1,26 @@
 import React from 'react'
+import { app } from '../Firebase'
+import { useCollection } from 'react-firebase-hooks/firestore'
+import { getFirestore, collection } from 'firebase/firestore'
 import 'animate.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import ProductThumbnail from '../components/ProductThumbnail'
 
-
 const ProductPage = () => {
+
+    const db:any = getFirestore(app)
+
+    const productsRef:any = collection(db, 'products')
+    const [ values, loading, error ] : any = useCollection(productsRef)
+    
+    // console.log(values, loading)
+    // if(loading){
+    //     console.log('loading')
+    // }else{
+    //     console.log(values.docs.map((product : { data : () => any }) => product.data()));   
+    // }
+
   return (
     <div className='animate__animated animate__fadeInUp animate__faster'>
         <div className="row">
@@ -64,6 +79,9 @@ const ProductPage = () => {
             </div>
             <div className="col-md-9 p-3">
                 <ProductThumbnail />
+                {error ? <div>Error!</div> : 
+                loading ? <div>Loading...</div> : 
+                values.docs.map((product : any) => <ProductThumbnail key={product.id} pid={product.id} product={product.data()} />)}
             </div>
         </div>
     </div>
