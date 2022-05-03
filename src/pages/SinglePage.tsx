@@ -1,4 +1,4 @@
-import React,  { useEffect, useState } from 'react'
+import React,  { useState } from 'react'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import 'animate.css';
@@ -14,34 +14,33 @@ const SinglePage = () => {
     const [ product, setproduct ] = useState(null)
     const [colors, setcolors] = useState([''])
     const [sizes, setsizes] = useState([''])
+    const [_usercolor, set_usercolor] = useState(0)
+    const [_usersize, set_usersize] = useState(0)
+    const [photos, setphotos] = useState([''])
 
     let { pid } : any = useParams();
 
-    let data = {
-        id : pid,
-        name : "Coudory Long Sleeve",
-        price : "9000",
-    }
     // console.log(pid)
 
     const db:any = getFirestore(app)
     const productRef = doc(db, `products/${pid}`)
     const [snapshot, loading, error] : any = useDocument(productRef);
-
-
     
-    useEffect(() => {
-        // let price:number = 5000;
-        // let stringedPrice:string = price.toString()
-        // console.log(stringedPrice.split(','))
+    React.useEffect(() => {
         if(snapshot){
             setproduct(snapshot.data());
             setcolors(snapshot.data().color)
             setsizes(snapshot.data().size)
+            setphotos(snapshot.data().photos)
         }
     }, [snapshot])
     
 
+    const selectColor = (color : string) => {}
+
+    const selectSize = (size : string) => {}
+
+    const addToCart = () => {}
 
   return (
       <>
@@ -64,7 +63,7 @@ const SinglePage = () => {
         </div>
         <div className="row">
             <div className="col-md-6">
-                <ProductThumbnail pid={data.id} prod={data} large={true} />
+                <ProductThumbnail product={snapshot.data()} large={true} />
                 <div className="d-flex mt-3" style={{justifyContent : 'center', maxWidth : 454}}>
                     <button className="btn btn-primary btn-lg mr-3">
                         Buy Now
@@ -94,30 +93,32 @@ const SinglePage = () => {
                             <h4 className="text-mid-sub">
                                 Color
                             </h4>
-                            <p className="text-p">
+                            <div className="text-p">
                                 <div className="d-flex">
-                                    {colors && colors.map((color:string) => {
+                                    {colors && colors.map((color:string, index:number) => {
                                             return(
-                                                <div className="color-box mr-2" key={colors.indexOf(color)} style={{backgroundColor : color}}></div>
+                                                <div className={`color-box mr-2 ${index === _usercolor ? 'active' : ''}`} id={color} onClick={() => set_usercolor(index)} key={index} style={{backgroundColor : color}}></div>
                                             )
                                         })
                                     }
                                 </div>
-                            </p>
+                            </div>
                         </div>
 
                         <div className="mb-5">
                             <h4 className="text-mid-sub">
                                 Available Size
                             </h4>
-                            <p className="text-p">
+                            <div className="text-p">
                                 <div className="d-flex">
-                                    <div className="size-box active mr-2">S</div>
-                                    <div className="size-box mr-2">M</div>
-                                    <div className="size-box mr-2">L</div>
-                                    
+                                    {sizes && sizes.map((size:string, index:number) => {
+                                            return(
+                                                <div className={`size-box mr-2 ${index === _usersize ? 'active' : '' } `} onClick={() => set_usersize(index)} key={index}>{size}</div>
+                                            )
+                                        })
+                                    }
                                 </div>
-                            </p>
+                            </div>
                         </div>
                     </div>
                 </div>
